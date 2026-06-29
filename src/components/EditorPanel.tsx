@@ -203,17 +203,39 @@ export default function EditorPanel() {
           </button>
         </div>
 
-        {/* Execute Button */}
-        <div className="p-2 md:p-3">
+        {/* Debug info */}
+        <div className="px-3 py-1 border-t border-white/5 flex items-center gap-2 text-[8px] font-mono text-slate-600 overflow-x-auto" style={{ background: '#050510' }}>
+          <span>editorRef: {editorRef.current ? '✓' : '✗'}</span>
+          <span>|</span>
+          <span>store.code: <span className="text-slate-400">{code.substring(0, 30).replace(/\n/g, '\\n')}</span></span>
+          <span>|</span>
+          <span>parsed: dx={parsed?.dx ?? '?'} dy={parsed?.dy ?? '?'}</span>
+        </div>
+
+        {/* Execute Buttons */}
+        <div className="p-2 md:p-3 flex gap-2">
           <button onClick={handleExecute} disabled={isLevelComplete}
-            className="w-full py-2.5 md:py-3 rounded-lg font-bold text-xs md:text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex-1 py-2.5 md:py-3 rounded-lg font-bold text-xs md:text-sm flex items-center justify-center gap-2 transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-30 disabled:cursor-not-allowed"
             style={{
               background: diff ? `${diff.color}` : '#00e5ff',
               color: '#070714',
               boxShadow: diff ? `0 0 20px ${diff.color}40` : '0 0 20px rgba(0,229,255,0.4)',
             }}>
             <Play fill="currentColor" size={16} />
-            RUN / EXECUTE
+            RUN
+          </button>
+          <button onClick={() => {
+            console.log('[TEST] executing hardcoded move: dx=2, dy=0');
+            executeMove(2, 0, 0, 1);
+            toast.success('TEST: mencoba pindah kanan 2 sel', { duration: 2000 });
+          }} disabled={isLevelComplete}
+            className="px-3 py-2.5 md:py-3 rounded-lg font-bold text-[10px] font-mono transition-all hover:scale-[1.01] active:scale-[0.99] disabled:opacity-30 disabled:cursor-not-allowed"
+            style={{
+              background: '#1a1a2e',
+              color: '#f43f5e',
+              border: '1px solid rgba(244,63,94,0.3)',
+            }}>
+            TEST
           </button>
         </div>
       </div>
