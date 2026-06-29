@@ -21,9 +21,10 @@ export default function EditorPanel() {
 
   const handleExecute = () => {
     try {
-      // Read fresh value from store to avoid stale closure
       const freshCode = useGameStore.getState().code;
+      console.log('[CSS] code:', freshCode);
       const result = parseCSS(freshCode);
+      console.log('[CSS] parsed result:', result);
       if (result.dx === 0 && result.dy === 0 && result.rotation === 0 && result.scale === 1) {
         toast.error("Tidak ada pergerakan. Coba tambah properti CSS!", { duration: 3000 });
         return;
