@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import Editor from '@monaco-editor/react';
+import { useState, useMemo, useRef } from 'react';
+import Editor, { OnMount } from '@monaco-editor/react';
 import { Play, RotateCcw, Lightbulb, Terminal, MoveRight, RotateCw, Shrink, Timer } from 'lucide-react';
 import { useGameStore } from '../game/store';
 import { parseCSS } from '../game/cssParser';
@@ -11,8 +11,13 @@ export default function EditorPanel() {
   const lvl = currentLevelData;
   const diff = lvl.difficulty ? getDifficultyLabel(lvl.difficulty) : null;
   const [tipLevel, setTipLevel] = useState(0);
+  const editorRef = useRef<any>(null);
 
-  // Live parse feedback
+  const handleMount: OnMount = (editor) => {
+    editorRef.current = editor;
+  };
+
+  // Live parse feedback (from store for reactivity)
   const parsed = useMemo(() => {
     try {
       return parseCSS(code);
@@ -21,9 +26,10 @@ export default function EditorPanel() {
 
   const handleExecute = () => {
     try {
-      const freshCode = useGameStore.getState().code;
-      console.log('[CSS] code:', freshCode);
-      const result = parseCSS(freshCode);
+      // Baca langsung dari Monaco editor instance — bukan dari store
+      const editorValue = editorRef.current?.getValue() ?? code;
+      console.log('[CSS] raw from editor:', editorValue);
+      const result = parseCSS(editorValue);
       console.log('[CSS] parsed result:', result);
       if (result.dx === 0 && result.dy === 0 && result.rotation === 0 && result.scale === 1) {
         toast.error("Tidak ada pergerakan. Coba tambah properti CSS!", { duration: 3000 });
@@ -153,10 +159,13 @@ export default function EditorPanel() {
       <div className="flex-1 min-h-[120px] relative">
         <Editor
           height="100%"
-          defaultLanguage="css"
+          language="css"
           theme="hc-black"
           value={code}
-          onChange={(v) => setCode(v || '')}
+          onMount={handleMount}
+          onChange={(v) => {
+            if (v !== undefined) setCode(v);
+          }}
           options={{
             minimap: { enabled: false },
             fontSize: window.innerWidth < 768 ? 13 : 15,
