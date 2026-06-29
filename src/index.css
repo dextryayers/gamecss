@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-pixel: "Press Start 2P", system-ui, monospace;
+  --color-deep: #070714;
+  --color-surface: #12122a;
+  --color-phosphor: #00e5ff;
+  --color-violet: #7c3aed;
+  --color-rose: #f43f5e;
+  --color-amber: #fbbf24;
+  --color-slate-850: #1a1a35;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #070714;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* CRT Scanline Overlay — the signature visual risk */
+.crt::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.15) 2px,
+    rgba(0, 0, 0, 0.15) 4px
+  );
+}
+
+.crt::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+/* Phosphor glow animation */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.97; }
+  93% { opacity: 0.98; }
+}
+.crt {
+  animation: flicker 0.15s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt {
+    animation: none;
+  }
+  .crt::after {
+    opacity: 0.3;
+  }
+}
+
+/* Pixelated border effect */
+.pixel-border {
+  box-shadow:
+    0 -2px 0 0 rgba(0, 229, 255, 0.3),
+    2px 0 0 0 rgba(0, 229, 255, 0.3),
+    0 2px 0 0 rgba(0, 229, 255, 0.3),
+    -2px 0 0 0 rgba(0, 229, 255, 0.3);
+}
+
+/* Terminal cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.terminal-cursor::after {
+  content: "▌";
+  animation: blink 1s step-end infinite;
+  color: #00e5ff;
+}
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+  outline: 2px solid #00e5ff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Custom scrollbar - cyberpunk thin */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.03); }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.25); border-radius: 2px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.5); }
+
+/* Card glow variants */
+.glow-cyan { box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); }
+.glow-violet { box-shadow: 0 0 20px rgba(124, 58, 237, 0.15); }
+.glow-amber { box-shadow: 0 0 20px rgba(251, 191, 36, 0.15); }
+.glow-rose { box-shadow: 0 0 20px rgba(244, 63, 94, 0.15); }
+.glow-white { box-shadow: 0 0 20px rgba(255, 255, 255, 0.15); }
+
+/* Screen curvature effect for CRT */
+.crt-screen {
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Difficulty badge styling */
+.badge-ez { background: rgba(0, 229, 255, 0.15); color: #00e5ff; border: 1px solid rgba(0, 229, 255, 0.3); }
+.badge-mid { background: rgba(124, 58, 237, 0.15); color: #7c3aed; border: 1px solid rgba(124, 58, 237, 0.3); }
+.badge-hard { background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); }
+.badge-expert { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); }
+.badge-advance { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.3); }

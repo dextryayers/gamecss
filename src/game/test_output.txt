@@ -1,0 +1,28 @@
+export type Difficulty = 'EZ' | 'MID' | 'HARD' | 'EXPERT' | 'ADVANCE';
+
+export interface Level {
+  id: number;
+  size: number;
+  grid: string[];
+  targetCss: string;
+  difficulty: Difficulty;
+  concept: string;
+  tips: { basic: string; pro: string };
+  minSteps: number;
+}
+
+function buildLevels(): Level[] {
+  return [
+    // ===================== EZ (1-30): Belajar dasar translate =====================
+    {
+      id: 1, size: 5, difficulty: 'EZ', concept: 'Langkah Pertama', targetCss: 'translate', minSteps: 1,
+      grid: ['.....', '.....', '..S..', '.....', '..E..'],
+      tips: { basic: 'E ada di bawah S. Kamu perlu gerak vertikal ke bawah. Coba `margin-top: 200px`, `padding-top: 200px`, `top: 200px`, atau `translateY(200px)`. Coba-coba nilai px!', pro: '1 sel = 100px. Jarak vertikal S(2,2) ke E(2,4) = 2 langkah = 200px ke bawah. Ingat: nilai positif = turun untuk semua properti CSS. Kamu bisa pakai properti lain seperti margin, padding, top, left, atau transform.' }
+    },
+    {
+      id: 2, size: 5, difficulty: 'EZ', concept: 'Geser ke Kanan', targetCss: 'translateX', minSteps: 2,
+      grid: ['.....', '..#..', '.S.E.', '.....', '.....'],
+      tips: { basic: 'E di kanan S dalam satu baris. Kamu perlu gerak horizontal ke kanan. Coba `margin-left: 200px`, `left: 200px`, `translateX(200px)`, atau `padding-left: 200px`.', pro: '1 sel = 100px. Jarak horizontal S(1,2) ke E(3,2) = 2 langkah = 200px ke kanan. Tembok di (2,1) tidak mengganggu gerak horizontalmu. Kamu bisa pakai properti lain seperti margin, padding, top, left, atau transform.' }
+    },
+  ];
+}
